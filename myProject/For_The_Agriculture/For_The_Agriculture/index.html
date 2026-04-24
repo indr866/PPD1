@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Advisor - Farmer Helper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            color: #1b5e20;
+            animation: bgPulse 12s infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+            100% { background: linear-gradient(135deg, #d0f0d4 0%, #a5d6a7 100%); }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeSlideUp 0.8s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 70px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        header:hover {
+            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: #2e7d32;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            animation: bounceSoft 2s infinite;
+        }
+
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1b5e20, #4caf50);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            color: #2e7d32;
+            font-weight: 500;
+            font-size: 1rem;
+            background: #e9f5e9;
+            display: inline-block;
+            padding: 6px 22px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 35px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            animation: cardFloat 0.6s ease-out;
+        }
+
+        @keyframes cardFloat {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 28px 45px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.96);
+        }
+
+        .form-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #1b5e20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-card h2 i {
+            color: #4caf50;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #558b2f;
+            margin-bottom: 30px;
+            font-weight: 400;
+            border-left: 4px solid #4caf50;
+            padding-left: 15px;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2e7d32;
+            font-size: 1rem;
+        }
+
+        .form-group label i {
+            color: #43a047;
+            width: 22px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border: 2px solid #c8e6c9;
+            border-radius: 28px;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            color: #1b5e20;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.2);
+            transform: scale(1.01);
+        }
+
+        /* Land Input Row */
+        .land-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .land-input input {
+            flex: 2;
+        }
+
+        .land-input select {
+            flex: 1;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #1b5e20, #388e3c);
+            box-shadow: 0 15px 28px rgba(46, 125, 50, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(2px);
+        }
+
+        /* Results Card */
+        .results-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 35px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            animation: slideUp 0.5s ease;
+            border-left: 6px solid #4caf50;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #1b5e20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Result Content Styling */
+        .crop-card {
+            background: linear-gradient(145deg, #f1f8e9, #ffffff);
+            border-radius: 32px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #c5e1a5;
+            transition: all 0.3s;
+        }
+
+        .crop-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .crop-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .crop-name i {
+            font-size: 2rem;
+            color: #4caf50;
+        }
+
+        .crop-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: #e8f5e9;
+            padding: 12px 18px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-item i {
+            font-size: 1.3rem;
+            color: #2e7d32;
+            width: 30px;
+        }
+
+        .detail-item strong {
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .soil-tip {
+            margin-top: 20px;
+            background: #fff8e1;
+            border-radius: 28px;
+            padding: 15px 20px;
+            border-left: 5px solid #ffb300;
+            font-size: 0.95rem;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid #4caf50;
+            color: #2e7d32;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: #4caf50;
+            color: white;
+            transform: translateX(-5px);
+            box-shadow: 0 6px 14px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #c8e6c9;
+            border-top: 5px solid #2e7d32;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hidden Utility */
+        .hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #2e5c2e;
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-card, .results-card {
+                padding: 25px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+            
+            .crop-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .land-input {
+                flex-direction: column;
+            }
+            
+            .submit-btn {
+                font-size: 1rem;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <h1>Smart Crop Advisor</h1>
+            </div>
+            <p class="tagline">AI-powered crop recommendations for Indian farmers</p>
+        </header>
+
+        <!-- Main Form -->
+        <main class="main-content">
+            <div class="form-card">
+                <h2><i class="fas fa-tractor"></i> Get Crop Recommendation</h2>
+                <p class="subtitle">Enter your details below for personalized advice</p>
+                
+                <form id="cropForm">
+                    <!-- State Selection -->
+                    <div class="form-group">
+                        <label for="state"><i class="fas fa-map-marker-alt"></i> Select State</label>
+                        <select id="state" required>
+                            <option value="">-- Choose State --</option>
+                        </select>
+                    </div>
+
+                    <!-- City Selection -->
+                    <div class="form-group">
+                        <label for="city"><i class="fas fa-city"></i> Select City/District</label>
+                        <select id="city" required disabled>
+                            <option value="">-- First select State --</option>
+                        </select>
+                    </div>
+
+                    <!-- Land Size -->
+                    <div class="form-group">
+                        <label for="landSize"><i class="fas fa-ruler-combined"></i> Land Size</label>
+                        <div class="land-input">
+                            <input type="number" id="landSize" placeholder="Enter land size" required min="0.1" step="0.1">
+                            <select id="landUnit">
+                                <option value="acres">Acres</option>
+                                <option value="hectares">Hectares</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Season -->
+                    <div class="form-group">
+                        <label for="season"><i class="fas fa-cloud-sun"></i> Current Season</label>
+                        <select id="season" required>
+                            <option value="">-- Select Season --</option>
+                            <option value="Kharif">Kharif (Jun - Oct)</option>
+                            <option value="Rabi">Rabi (Nov - Apr)</option>
+                            <option value="Zaid">Zaid (Mar - Jun)</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn" class="submit-btn">
+                        <i class="fas fa-search"></i> Get Crop Recommendation
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results-card hidden">
+                <h2><i class="fas fa-chart-line"></i> Recommendation Results</h2>
+                
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Analyzing your farm details with AI...</p>
+                </div>
+
+                <div id="resultContent"></div>
+
+                <button id="backBtn" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Form
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>Powered by Cohere AI • Data sourced from ICAR & IMD</p>
+            <p class="disclaimer">Note: This is a demo. Consult local agricultural officers for final decisions.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smart Crop Advisor - Main JavaScript (All in One)
+        
+        // Indian States and Districts Data
+        const indiaData = {
+            "Punjab": ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda", "Mohali"],
+            "Haryana": ["Faridabad", "Gurugram", "Hisar", "Karnal", "Rohtak", "Ambala"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Meerut", "Bareilly"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad", "Solapur"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli"],
+            "Karnataka": ["Bengaluru", "Mysore", "Hubli", "Mangalore", "Belgaum", "Gulbarga"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer"],
+            "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar"],
+            "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Asansol", "Durgapur"],
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Tirupati"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar", "Mahabubnagar"],
+            "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga", "Purnia"],
+            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur", "Puri"],
+            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Palakkad"]
+        };
+
+        // Crop recommendation database based on season
+        const cropDatabase = {
+            "Kharif": {
+                "Punjab": ["Basmati Rice", "Cotton", "Maize", "Sugarcane"],
+                "Haryana": ["Paddy", "Cotton", "Bajra", "Groundnut"],
+                "Uttar Pradesh": ["Paddy", "Sugarcane", "Arhar", "Maize"],
+                "Maharashtra": ["Soybean", "Cotton", "Tur", "Groundnut"],
+                "Tamil Nadu": ["Paddy", "Ragi", "Maize", "Groundnut"],
+                "Karnataka": ["Paddy", "Ragi", "Jowar", "Maize"],
+                "Gujarat": ["Cotton", "Groundnut", "Bajra", "Pigeonpea"],
+                "Rajasthan": ["Bajra", "Jowar", "Groundnut", "Moong"],
+                "Madhya Pradesh": ["Soybean", "Maize", "Arhar", "Cotton"],
+                "West Bengal": ["Paddy", "Jute", "Maize", "Sesame"],
+                "Andhra Pradesh": ["Paddy", "Groundnut", "Cotton", "Ragi"],
+                "Telangana": ["Paddy", "Cotton", "Maize", "Red Gram"],
+                "Bihar": ["Paddy", "Maize", "Arhar", "Sugarcane"],
+                "Odisha": ["Paddy", "Ragi", "Groundnut", "Maize"],
+                "Kerala": ["Paddy", "Tapioca", "Banana", "Pepper"]
+            },
+            "Rabi": {
+                "Punjab": ["Wheat", "Mustard", "Barley", "Gram"],
+                "Haryana": ["Wheat", "Mustard", "Barley", "Sunflower"],
+                "Uttar Pradesh": ["Wheat", "Barley", "Mustard", "Peas"],
+                "Maharashtra": ["Wheat", "Chickpea", "Safflower", "Sunflower"],
+                "Tamil Nadu": ["Paddy", "Maize", "Groundnut", "Sunflower"],
+                "Karnataka": ["Wheat", "Chickpea", "Jowar", "Sunflower"],
+                "Gujarat": ["Wheat", "Mustard", "Cumin", "Isabgol"],
+                "Rajasthan": ["Wheat", "Mustard", "Gram", "Barley"],
+                "Madhya Pradesh": ["Wheat", "Chickpea", "Mustard", "Peas"],
+                "West Bengal": ["Wheat", "Mustard", "Potato", "Sunflower"],
+                "Andhra Pradesh": ["Paddy", "Maize", "Sunflower", "Chickpea"],
+                "Telangana": ["Wheat", "Chickpea", "Sunflower", "Safflower"],
+                "Bihar": ["Wheat", "Maize", "Mustard", "Peas"],
+                "Odisha": ["Wheat", "Mustard", "Gram", "Sunflower"],
+                "Kerala": ["Paddy", "Tapioca", "Vegetables", "Cowpea"]
+            },
+            "Zaid": {
+                "Punjab": ["Watermelon", "Cucumber", "Muskmelon", "Fodder"],
+                "Haryana": ["Watermelon", "Muskmelon", "Cucumber", "Moong"],
+                "Uttar Pradesh": ["Watermelon", "Cucumber", "Bitter Gourd", "Pumpkin"],
+                "Maharashtra": ["Watermelon", "Muskmelon", "Cucumber", "Brinjal"],
+                "Tamil Nadu": ["Paddy", "Vegetables", "Maize", "Green Gram"],
+                "Karnataka": ["Cucumber", "Pumpkin", "Watermelon", "Tomato"],
+                "Gujarat": ["Watermelon", "Muskmelon", "Cucumber", "Fodder"],
+                "Rajasthan": ["Watermelon", "Muskmelon", "Moong", "Guar"],
+                "Madhya Pradesh": ["Watermelon", "Cucumber", "Pumpkin", "Tomato"],
+                "West Bengal": ["Watermelon", "Cucumber", "Bitter Gourd", "Okra"],
+                "Andhra Pradesh": ["Watermelon", "Cucumber", "Tomato", "Brinjal"],
+                "Telangana": ["Watermelon", "Muskmelon", "Tomato", "Chili"],
+                "Bihar": ["Watermelon", "Cucumber", "Pumpkin", "Bitter Gourd"],
+                "Odisha": ["Watermelon", "Cucumber", "Tomato", "Brinjal"],
+                "Kerala": ["Cucumber", "Pumpkin", "Bitter Gourd", "Snake Gourd"]
+            }
+        };
+
+        // Soil & Farming tips
+        const cropTips = {
+            "Paddy": "Requires clayey soil and standing water. Ensure proper drainage after harvest.",
+            "Wheat": "Well-drained loamy soil. Provide 2-3 irrigations during growing period.",
+            "Cotton": "Black cotton soil ideal. Avoid waterlogging.",
+            "Sugarcane": "Deep rich soil, long duration crop. Apply adequate organic manure.",
+            "Maize": "Well-drained loamy soil, moderate watering.",
+            "Groundnut": "Sandy loam soil, requires less water.",
+            "Soybean": "Well-drained loamy soil, fix atmospheric nitrogen.",
+            "Mustard": "Light loamy soil, cool season crop.",
+            "Basmati Rice": "Specific aromatic variety, requires low humidity during ripening.",
+            "Gram": "Well-drained loamy soil, rainfed conditions suitable.",
+            "Watermelon": "Sandy loam soil, requires warm climate and regular watering.",
+            "Cucumber": "Well-drained fertile soil, requires trellising for better yield."
+        };
+
+        // Helper functions
+        function getRandomCrop(cropsArray) {
+            if (!cropsArray || cropsArray.length === 0) return "Paddy";
+            const randomIndex = Math.floor(Math.random() * cropsArray.length);
+            return cropsArray[randomIndex];
+        }
+
+        function getYieldEstimate(crop, landSizeAcres) {
+            const baseYield = {
+                "Paddy": 2.5, "Wheat": 2.8, "Cotton": 1.2, "Sugarcane": 40,
+                "Maize": 2.5, "Groundnut": 1.2, "Soybean": 1.3, "Mustard": 1.1,
+                "Basmati Rice": 2.2, "Gram": 1.0, "Watermelon": 12, "Cucumber": 8
+            };
+            const yieldPerAcre = baseYield[crop] || 2.0;
+            return (yieldPerAcre * landSizeAcres).toFixed(1);
+        }
+
+        // Populate states
+        function populateStates() {
+            const stateSelect = document.getElementById('state');
+            if (!stateSelect) return;
+            
+            const states = Object.keys(indiaData).sort();
+            stateSelect.innerHTML = '<option value="">-- Choose State --</option>';
+            states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        }
+
+        // Populate cities
+        function populateCities(selectedState) {
+            const citySelect = document.getElementById('city');
+            if (!citySelect) return;
+            
+            citySelect.innerHTML = '<option value="">-- Select City/District --</option>';
+            
+            if (selectedState && indiaData[selectedState]) {
+                const cities = indiaData[selectedState];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                citySelect.disabled = false;
+            } else {
+                citySelect.disabled = true;
+            }
+        }
+
+        // Generate recommendation
+        function getRecommendation(state, season, landSizeAcres) {
+            const cropOptions = cropDatabase[season]?.[state];
+            let primaryCrop = "Paddy";
+            let secondaryCrop = "Wheat";
+            
+            if (cropOptions && cropOptions.length > 0) {
+                primaryCrop = getRandomCrop(cropOptions);
+                const remaining = cropOptions.filter(c => c !== primaryCrop);
+                secondaryCrop = remaining.length > 0 ? getRandomCrop(remaining) : "Wheat";
+            } else {
+                if (season === "Kharif") primaryCrop = "Paddy";
+                else if (season === "Rabi") primaryCrop = "Wheat";
+                else primaryCrop = "Watermelon";
+                secondaryCrop = "Maize";
+            }
+            
+            const yieldEstimate = getYieldEstimate(primaryCrop, landSizeAcres);
+            const tip = cropTips[primaryCrop] || "Use organic fertilizers and practice crop rotation for better yield.";
+            
+            return { primaryCrop, secondaryCrop, yieldEstimate, tip, season, state };
+        }
+
+        // Display results
+        function displayResults(recommendation, landSize, unit, city) {
+            const resultDiv = document.getElementById('resultContent');
+            if (!resultDiv) return;
+            
+            resultDiv.innerHTML = `
+                <div class="crop-card">
+                    <div class="crop-name">
+                        <i class="fas fa-leaf"></i> 
+                        ${recommendation.primaryCrop}
+                    </div>
+                    <div class="crop-details">
+                        <div class="detail-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <strong>Expected Yield:</strong> ${recommendation.yieldEstimate} quintals/acre
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <strong>Season:</strong> ${recommendation.season}
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <strong>Region:</strong> ${city}, ${recommendation.state}
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-ruler-combined"></i>
+                            <strong>Land Size:</strong> ${landSize} ${unit}
+                        </div>
+                    </div>
+                    <div class="soil-tip">
+                        <i class="fas fa-lightbulb" style="margin-right: 10px;"></i> 
+                        <strong>Farming Tip:</strong> ${recommendation.tip}
+                    </div>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-name">
+                        <i class="fas fa-seedling"></i> 
+                        Alternate: ${recommendation.secondaryCrop}
+                    </div>
+                    <p style="margin-top: 10px; color: #2e7d32;">Consider crop rotation with ${recommendation.secondaryCrop} for soil health and risk management.</p>
+                </div>
+            `;
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Smart Crop Advisor Loaded!");
+            
+            populateStates();
+            
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
+            const form = document.getElementById('cropForm');
+            const resultsDiv = document.getElementById('results');
+            const formCard = document.querySelector('.form-card');
+            const backBtn = document.getElementById('backBtn');
+            const loadingDiv = document.getElementById('loading');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // State change event
+            if (stateSelect) {
+                stateSelect.addEventListener('change', (e) => {
+                    populateCities(e.target.value);
+                });
+            }
+            
+            // Form submission
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const state = stateSelect.value;
+                    const city = citySelect.value;
+                    const landSize = parseFloat(document.getElementById('landSize').value);
+                    const landUnit = document.getElementById('landUnit').value;
+                    const season = document.getElementById('season').value;
+                    
+                    // Validation
+                    if (!state || state === "") {
+                        alert("Please select a state!");
+                        return;
+                    }
+                    if (!city || city === "") {
+                        alert("Please select a city/district!");
+                        return;
+                    }
+                    if (!landSize || isNaN(landSize) || landSize <= 0) {
+                        alert("Please enter a valid land size (> 0)");
+                        return;
+                    }
+                    if (!season || season === "") {
+                        alert("Please select a season!");
+                        return;
+                    }
+                    
+                    // Convert to acres
+                    let landInAcres = landUnit === "acres" ? landSize : landSize * 2.471;
+                    
+                    // Show loading
+                    if (loadingDiv) loadingDiv.classList.remove('hidden');
+                    if (submitBtn) submitBtn.disabled = true;
+                    
+                    // Simulate AI delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    const recommendation = getRecommendation(state, season, landInAcres);
+                    displayResults(recommendation, landSize, landUnit, city);
+                    
+                    if (loadingDiv) loadingDiv.classList.add('hidden');
+                    if (submitBtn) submitBtn.disabled = false;
+                    
+                    // Hide form, show results
+                    if (formCard) formCard.classList.add('hidden');
+                    if (resultsDiv) resultsDiv.classList.remove('hidden');
+                    
+                    // Smooth scroll
+                    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+            
+            // Back button
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (resultsDiv) resultsDiv.classList.add('hidden');
+                    if (formCard) formCard.classList.remove('hidden');
+                    formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
